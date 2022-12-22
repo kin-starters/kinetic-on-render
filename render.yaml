@@ -1,0 +1,49 @@
+services:
+  - type: web
+    name: my-kinetic-api
+    plan: free
+    numInstances: 1
+    healthCheckPath: /api/uptime
+    env: docker
+    dockerfilePath: ./Dockerfile
+    region: oregon
+    branch: main
+    envVars:
+      - key: API_URL
+        value: https://my-kinetic-api.onrender.com/api
+      - key: AUTH_PASSWORD_ENABLED
+        value: true
+      - key: AUTH_USERS
+        value: admin|Kinetic1|Admin
+      - key: APP_1_NAME
+        value: App 1
+      - key: APP_1_FEE_PAYER_SECRET
+        value: UvfuF3FPqLyvS8xGjSu4AUfdsY5QvLdnin8SKBLAi3UqgbmEWCDshPY3UcxvBgRAqHLzh5Ni1eypLVZArsis6FF
+      - key: JWT_SECRET
+        value: secret
+      - key: LOG_LEVEL
+        value: ALL
+      - key: PORT
+        value: 3000
+      - key: SOLANA_DEVNET_MINT_KIN_AIRDROP_SECRET
+        value: UvfuF3FPqLyvS8xGjSu4AUfdsY5QvLdnin8SKBLAi3UqgbmEWCDshPY3UcxvBgRAqHLzh5Ni1eypLVZArsis6FF"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kinetic-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: kinetic-redis
+          property: connectionString
+  - type: redis
+    name: kinetic-redis
+    plan: free
+    ipAllowList: []
+databases:
+  - name: kinetic-postgres
+    plan: free
+    databaseName: kinetic
+    user: kinetic_pg
+    ipAllowList: []
+    postgresMajorVersion: 15
